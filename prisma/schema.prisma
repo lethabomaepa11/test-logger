@@ -1,0 +1,42 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model TestRun {
+  id            String   @id @default(cuid())
+  skill         String
+  version       String
+  branch        String
+  githubUrl     String?
+  model         String?
+  prompt        String?
+  tokensUsed    Int?
+  timeTakenSecs Int?
+  rating        Int?
+  passed        Boolean  @default(false)
+  findings      String?
+  createdAt     DateTime @default(now())
+
+  @@index([skill, createdAt])
+  @@index([skill, version])
+  @@index([skill, model])
+}
+
+model Iteration {
+  id            String   @id @default(cuid())
+  skill         String
+  version       String
+  summary       String
+  rationale     String
+  analysis      String
+  filesChanged  String?
+  triggerRunIds String?
+  createdAt     DateTime @default(now())
+
+  @@index([skill, createdAt])
+}
